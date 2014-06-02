@@ -8,7 +8,7 @@
 
 /**
  *  Configure the camera of a device by the AVFoundation framework.
- *  This class is abstract. Please use the concrete subclasses instead of this class.
+ *  Because this class is abstract, please use the concrete subclasses instead of this class.
  */
 
 #import <Foundation/Foundation.h>
