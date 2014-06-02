@@ -20,6 +20,7 @@
 		9B72F2A8193C0A6100151754 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9B72F2A6193C0A6100151754 /* InfoPlist.strings */; };
 		9B72F2AA193C0A6100151754 /* SHCameraSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B72F2A9193C0A6100151754 /* SHCameraSessionTests.m */; };
 		9B72F2B8193C0AB600151754 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B72F2B7193C0AB600151754 /* MainViewController.m */; };
+		9B72F2BB193C0C0A00151754 /* SHCameraSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B72F2BA193C0C0A00151754 /* SHCameraSession.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		9B72F2A9193C0A6100151754 /* SHCameraSessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHCameraSessionTests.m; sourceTree = "<group>"; };
 		9B72F2B6193C0AB600151754 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		9B72F2B7193C0AB600151754 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		9B72F2B9193C0C0A00151754 /* SHCameraSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SHCameraSession.h; path = Classes/SHCameraSession.h; sourceTree = "<group>"; };
+		9B72F2BA193C0C0A00151754 /* SHCameraSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SHCameraSession.m; path = Classes/SHCameraSession.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +80,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B4E602A193C0D9800801241 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				9B72F2B9193C0C0A00151754 /* SHCameraSession.h */,
+				9B72F2BA193C0C0A00151754 /* SHCameraSession.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
 		9B72F278193C0A6100151754 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +128,7 @@
 				9B72F2B7193C0AB600151754 /* MainViewController.m */,
 				9B72F296193C0A6100151754 /* Images.xcassets */,
 				9B72F28B193C0A6100151754 /* Supporting Files */,
+				9B4E602A193C0D9800801241 /* Classes */,
 			);
 			path = SHCameraSession;
 			sourceTree = "<group>";
@@ -244,6 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B72F2BB193C0C0A00151754 /* SHCameraSession.m in Sources */,
 				9B72F295193C0A6100151754 /* AppDelegate.m in Sources */,
 				9B72F2B8193C0AB600151754 /* MainViewController.m in Sources */,
 				9B72F291193C0A6100151754 /* main.m in Sources */,
@@ -443,6 +457,7 @@
 				9B72F2AF193C0A6100151754 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B72F2B0193C0A6100151754 /* Build configuration list for PBXNativeTarget "SHCameraSessionTests" */ = {
 			isa = XCConfigurationList;
@@ -451,6 +466,7 @@
 				9B72F2B2193C0A6100151754 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
