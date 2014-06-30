@@ -32,9 +32,21 @@
 - (UIView *)cameraViewWithFrame:(CGRect)frame;
 
 /**
- *  @brief Adjust the focus, exposure and while balance of the camera at the point.
+ *  @brief Adjust the focus, exposure and while balance of the camera at the point that is inside a given rect.
  *
- *  @param point The point of interest for foucs, exposure and while balance.
+ *  @param point The point that is inside a rect. This point might be the touch point.
+ *  @param rect  The rect might be the bounds of the touch view.
  */
-- (void)adjustCameraStatusAtPoint:(CGPoint)point;
+- (void)adjustCameraStatusAtPoint:(CGPoint)point inRect:(CGRect)rect;
+
+/**
+ *  @brief Crop the camera image with a given region that is inside a particular rect
+ *
+ *  @param image      The image from the device camera
+ *  @param cropRegion The crop region that is inside a given rect
+ *  @param rect       The rect that the crop region is in
+ *
+ *  @return The crop image
+ */
+- (UIImage *)cropCameraImage:(UIImage *)image withRegion:(CGRect)cropRegion inRect:(CGRect)rect;
 @end

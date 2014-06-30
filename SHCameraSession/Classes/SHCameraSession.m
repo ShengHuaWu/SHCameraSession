@@ -43,8 +43,27 @@
     return view;
 }
 
-- (void)adjustCameraStatusAtPoint:(CGPoint)point
+- (void)adjustCameraStatusAtPoint:(CGPoint)point inRect:(CGRect)rect
 {
+    // Convert the point to the camera interest point
+    // Rotate the point since the app only supports portrait
+    CGPoint interestPoint = CGPointMake(point.y / CGRectGetHeight(rect), 1.0 - point.x / CGRectGetWidth(rect));
+    // Configure the camera view size
+    CGSize previewSize = CGSizeMake(352.0f, 288.0f);
+    if ([self.session.sessionPreset isEqualToString:AVCaptureSessionPreset1280x720]) {
+        previewSize = CGSizeMake(1280.0f, 720.0f);
+    } else if ([self.session.sessionPreset isEqualToString:AVCaptureSessionPreset640x480]) {
+        previewSize = CGSizeMake(640.0f, 480.0f);
+    }
+    // Scale the interest point
+    CGFloat scale = (previewSize.width * CGRectGetWidth(rect)) / (previewSize.height * CGRectGetHeight(rect));
+    if (scale < 1.0f) {
+        interestPoint.y = (interestPoint.y - 0.5f) * scale + 0.5f;
+    } else if (scale > 1.0f) {
+        interestPoint.x = (interestPoint.x - 0.5f) / scale + 0.5f;
+    }
+    
+    // Adjust camera status with the interest point
     if ([self.device lockForConfiguration:nil]) {
         if ([self.device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
             self.device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
@@ -52,7 +71,7 @@
             self.device.focusMode = AVCaptureFocusModeAutoFocus;
         }
         if ([self.device isFocusPointOfInterestSupported]) {
-            self.device.focusPointOfInterest = point;
+            self.device.focusPointOfInterest = interestPoint;
         }
         if ([self.device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
             self.device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
@@ -60,7 +79,7 @@
             self.device.exposureMode = AVCaptureExposureModeAutoExpose;
         }
         if ([self.device isExposurePointOfInterestSupported]) {
-            self.device.exposurePointOfInterest = point;
+            self.device.exposurePointOfInterest = interestPoint;
         }
         if ([self.device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance]) {
             self.device.whiteBalanceMode = AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance;
@@ -69,6 +88,41 @@
         }
         [self.device unlockForConfiguration];
     }
+}
+
+- (UIImage *)cropCameraImage:(UIImage *)image withRegion:(CGRect)cropRegion inRect:(CGRect)rect
+{
+    // Mapping the region to the camera frame
+    CGAffineTransform t1 = CGAffineTransformIdentity;
+    CGAffineTransform t2 = CGAffineTransformIdentity;
+    CGFloat scale = 0.0;
+    CGFloat offset = 0.0;
+    if ([self.session.sessionPreset isEqualToString:AVCaptureSessionPreset1280x720]) {
+        // Rotate and scale to adapt with camera frame size
+        scale = 720.0 / CGRectGetWidth(rect);
+        t1 = CGAffineTransformScale(CGAffineTransformMakeRotation(-M_PI / 2.0), scale, scale);
+        // Add offset from the part that camera frame out of screen
+        offset = (1280.0 - CGRectGetHeight(rect) * scale) / 2.0;
+        t2 = CGAffineTransformMakeTranslation(offset, 720.0);
+    } else if ([self.session.sessionPreset isEqualToString:AVCaptureSessionPreset640x480]) {
+        scale = 640.0 / CGRectGetHeight(rect);
+        t1 = CGAffineTransformScale(CGAffineTransformMakeRotation(-M_PI / 2.0), scale, scale);
+        CGFloat offset = 480.0 - (480.0 - CGRectGetWidth(rect) * scale) / 2.0;
+        t2 = CGAffineTransformMakeTranslation(0.0, offset);
+    } else {
+        scale = 352.0 / CGRectGetHeight(rect);
+        t1 = CGAffineTransformScale(CGAffineTransformMakeRotation(-M_PI / 2.0), scale, scale);
+        offset = 288.0 - (288.0 - CGRectGetWidth(rect) * scale) / 2.0;
+        t2 = CGAffineTransformMakeTranslation(0.0, offset);
+    }
+    CGRect mappingRegion = CGRectApplyAffineTransform(cropRegion, CGAffineTransformConcat(t1, t2));
+    
+    // Crop and rotate the image
+    CGImageRef croppedImage = CGImageCreateWithImageInRect(image.CGImage, mappingRegion);
+    UIImage *resultImage = [[UIImage alloc] initWithCGImage:croppedImage scale:1.0 orientation:UIImageOrientationRight];
+    CGImageRelease(croppedImage);
+    
+    return resultImage;
 }
 
 @end
